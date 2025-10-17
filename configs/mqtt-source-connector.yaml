@@ -23,7 +23,7 @@ spec:
     connect.mqtt.kcql: |
       INSERT INTO wearables-raw 
       SELECT * 
-      FROM wearables/+/data 
+      FROM wearables/# 
     
     # Or simpler mapping:
     # connect.mqtt.topics: "wearables/+/data:wearables-raw"

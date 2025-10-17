@@ -1,59 +1,92 @@
 import json
-import threading
-
-import paho.mqtt.client as mqtt
-import os
-from dotenv import load_dotenv
 import random
+import threading
 import time
+from time import sleep
 
-load_dotenv()
+from paho.mqtt import client as mqttc
+from paho.mqtt.client import CallbackAPIVersion
 
-BROKER = os.getenv("BROKER_ADDR")
-PORT = os.getenv("BROKER_PORT") # standard mosquitto port
-TOPIC_PREFIX = os.getenv("TOPIC_PREFIX")
+HOST = "localhost"
+PORT = 1883
+PPG_PREFIX = "wearables/ppg_sensor/"
+ECG_PREFIX = "wearables/ecg_sensor/"
 
-SENSORS = os.getenv("SENSOR_COUNT")
-INTERVAL = os.getenv("MEASURE_INTERVAL")
+# Number of Sensors that will be simulated
+PPGSENSORS = 5
+ECGSENSORS = 5
+SEND_INTERVAL = 2 #sek
+
+stop_event = threading.Event()
 
 
-def simulate_sensor(sensor_id):
-    mqtt_client = mqtt.Client(f"sensor_{sensor_id}")
-    mqtt_client.connect(BROKER, int(PORT))
+def simulating_sensor(sensor_type, client_id):
+    device_id = f"{sensor_type}_sensor_{client_id}"
+    mqtt_client = mqttc.Client(CallbackAPIVersion.VERSION2, device_id)
+    mqtt_client.connect(HOST, PORT)
     mqtt_client.loop_start()
 
-    topic = f"{TOPIC_PREFIX}sensor_{sensor_id}"
+    topic = ""
+    if sensor_type == "ppg":
+        topic = f"{PPG_PREFIX}{device_id}"
+    else:
+        topic = f"{ECG_PREFIX}{device_id}"
 
     try:
-        while True:
-            temperature = round(random.gauss(20,25))
+        while not stop_event.is_set():
+            ir_value = random.randint(40000, 60000)
+            red_value = random.randint(40000, 60000)
+            green_value = random.randint(40000, 60000)
+            heart_rate_bpm = random.randint(70, 80)
+            spo2_percent = round(random.uniform(97, 100))
 
-            pl = {
-                "sensor_id": sensor_id,
-                "temperature": temperature,
-                "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
+            mock_pl = {
+                "device_id": device_id,
+                "user_id": client_id,
+                "data": [
+                    {
+                        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+                        "ir_value": ir_value,
+                        "red_value": red_value,
+                        "green_value": green_value,
+                        "heart_rate_bpm": heart_rate_bpm,
+                        "spo2_percent": spo2_percent
+                    }
+                ]
             }
+            mqtt_client.publish(topic, json.dumps(mock_pl))
 
-            mqtt_client.publish(topic, json.dumps(pl))
-
-            time.sleep(int(INTERVAL))
-    except KeyboardInterrupt:
-        print(f"Sensor {sensor_id} stopped.")
+        sleep(SEND_INTERVAL * random.uniform(0, 1))
     finally:
         mqtt_client.loop_stop()
         mqtt_client.disconnect()
-
+        print(f"Device {device_id} stopped")
 
 def main():
-    threads = []
+    ppgs = []
+    ecgs = []
 
-    for i in range(1, int(SENSORS) + 1):
-        t = threading.Thread(target=simulate_sensor, args=(i,))
-        t.start()
-        threads.append(t)
+    for i in range(1, PPGSENSORS + 1):
+        ppg_sensor = threading.Thread(target=simulating_sensor, args=("ppg", i))
+        ppg_sensor.start()
+        ppgs.append(ppg_sensor)
 
-    for t in threads:
+    for i in range(1, ECGSENSORS + 1):
+        ecg_sensor = threading.Thread(target=simulating_sensor, args=("ecg", i))
+        ecg_sensor.start()
+        ecgs.append(ecg_sensor)
+
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("\nStopping all sensors...")
+        stop_event.set()
+
+    for t in ppgs + ecgs:
         t.join()
+
+    print("All Threads stopped")
 
 if __name__ == "__main__":
     main()
