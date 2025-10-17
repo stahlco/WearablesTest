@@ -1,0 +1,34 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: mqtt-source
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: my-connect-cluster  # Must match your KafkaConnect name
+spec:
+  class: io.lenses.streamreactor.connect.mqtt.source.MqttSourceConnector
+  tasksMax: 1
+  config:
+    # MQTT Settings
+    connect.mqtt.hosts: "tcp://mosquitto-service.kafka.svc.cluster.local:1883"
+    connect.mqtt.username: "user"  # if needed
+    connect.mqtt.password: "pass"  # if needed
+    connect.mqtt.client.id: "kafka-connect-source"
+    connect.mqtt.service.quality: 1  # QoS level
+    connect.mqtt.connection.timeout: 60
+    connect.mqtt.keep.alive: 60
+    
+    # Topic Mappings - THIS IS KEY!
+    # Format: mqtt_topic:kafka_topic
+    connect.mqtt.kcql: |
+      INSERT INTO wearables-raw 
+      SELECT * 
+      FROM wearables/+/data 
+    
+    # Or simpler mapping:
+    # connect.mqtt.topics: "wearables/+/data:wearables-raw"
+    
+    # Converter settings (how to interpret MQTT payload)
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+    value.converter.schemas.enable: false
