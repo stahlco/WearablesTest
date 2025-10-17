@@ -37,13 +37,4 @@ spec:
   jvmOptions: # (15)
     "-Xmx": "2G"
     "-Xms": "512M"
-  build: # (9)
-    output: # (10)
-      type: docker
-      image: public.ecr.aws/r9b1k0m0/kafka-connect:latest
-      pushSecret: ecr-secret
-    plugins: # (11)
-      - name: mqtt
-        artifacts:
-          - type: zip
-            url: https://github.com/lensesio/stream-reactor/releases/download/10.0.1/kafka-connect-mqtt-10.0.1.zip
+  image: public.ecr.aws/r9b1k0m0/kafka-connect:latest
