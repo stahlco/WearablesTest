@@ -1,0 +1,19 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: quest-sink
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: my-connect-cluster  # Must match your KafkaConnect name
+spec:
+  class: io.questdb.kafka.QuestDBSinkConnector
+  tasksMax: 1
+  config:
+    client.conf.string: "http::addr=my-questdb.kafka.svc.cluster.local:9000;"
+    topics: wearables_raw
+    table: wearables_raw
+    include.key: false
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+    value.converter.schemas.enable: false
+
