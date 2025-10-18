@@ -1,5 +1,8 @@
 ## Test Minikube Cluster with Kafka, Kafka-Connect, Mosquitto
 
+This is just a little test deployment, of a minikube cluster with kafka and mosquitto.
+
+
 ---
 #### Start the Minikube-Cluster
 ```shell

@@ -79,11 +79,11 @@ def publish_ecg_message(mqtt_client, device_id, client_id) -> MQTTMessageInfo:
         "client_id": client_id,
         "data": [
             {
+                "lead-0": leads[0],
                 "lead-1": leads[1],
                 "lead-2": leads[2],
                 "lead-3": leads[3],
                 "lead-4": leads[4],
-                "lead-5": leads[5],
                 "heart_rate_bpm": heart_rate_bpm
             }
         ]

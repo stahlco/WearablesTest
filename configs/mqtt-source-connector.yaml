@@ -20,10 +20,7 @@ spec:
     
     # Topic Mappings - THIS IS KEY!
     # Format: mqtt_topic:kafka_topic
-    connect.mqtt.kcql: |
-      INSERT INTO wearables-raw 
-      SELECT * 
-      FROM wearables/# 
+    connect.mqtt.kcql: "INSERT INTO wearables-raw SELECT * FROM 'wearables/#'"
     
     # Or simpler mapping:
     # connect.mqtt.topics: "wearables/+/data:wearables-raw"
