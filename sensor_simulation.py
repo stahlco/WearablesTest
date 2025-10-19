@@ -79,6 +79,7 @@ def publish_ecg_message(mqtt_client, device_id, client_id) -> MQTTMessageInfo:
         "client_id": client_id,
         "data": [
             {
+                "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
                 "lead-0": leads[0],
                 "lead-1": leads[1],
                 "lead-2": leads[2],

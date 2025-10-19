@@ -32,7 +32,7 @@ metadata:
   namespace: kafka
 spec:
   selector:
-    app: influx
+    app: influxdb
   ports:
     - port: 8086
       targetPort: 8086

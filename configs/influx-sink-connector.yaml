@@ -1,0 +1,34 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: influx-sink
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: my-connect-cluster
+spec:
+  class: io.lenses.streamreactor.connect.influx.InfluxSinkConnector
+  tasksMax: 1
+  config:
+    connect.influx.url: "influx-service.kafka.svc.cluster.local:8086"
+    connect.influx.bucket: "${file:/opt/kafka/connect/secrets/INFLUX_BUCKET}"
+    connect.influx.org: "${file:/opt/kafka/connect/secrets/INFLUX_ORG}"
+    connecrt.influx.token: "${file:/opt/kafka/connect/secrets/INFLUX_TOKEN}"
+    connect.influx.kcql: "INSERT INTO measurements SELECT * FROM wearables-raw WITHTIMESTAMP data->timestamp"
+
+    env:
+    - name: INFLUX_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: influx-secret
+          key: INFLUX_TOKEN
+    - name: INFLUX_ORG
+      valueFrom:
+        secretKeyRef:
+          name: influx-secret
+          key: INFLUX_ORG
+    - name: INFLUX_BUCKET
+      valueFrom:
+        secretKeyRef:
+          name: influx-secret
+          key: INFLUX_BUCKET
+
