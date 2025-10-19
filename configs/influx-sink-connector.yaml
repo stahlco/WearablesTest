@@ -14,21 +14,3 @@ spec:
     connect.influx.org: "${file:/opt/kafka/connect/secrets/INFLUX_ORG}"
     connecrt.influx.token: "${file:/opt/kafka/connect/secrets/INFLUX_TOKEN}"
     connect.influx.kcql: "INSERT INTO measurements SELECT * FROM wearables-raw WITHTIMESTAMP data->timestamp"
-
-    env:
-    - name: INFLUX_TOKEN
-      valueFrom:
-        secretKeyRef:
-          name: influx-secret
-          key: INFLUX_TOKEN
-    - name: INFLUX_ORG
-      valueFrom:
-        secretKeyRef:
-          name: influx-secret
-          key: INFLUX_ORG
-    - name: INFLUX_BUCKET
-      valueFrom:
-        secretKeyRef:
-          name: influx-secret
-          key: INFLUX_BUCKET
-
