@@ -9,9 +9,9 @@ spec:
   class: io.questdb.kafka.QuestDBSinkConnector
   tasksMax: 1
   config:
-    client.conf.string: "http::addr=my-questdb.kafka.svc.cluster.local:9000;"
-    topics: wearables_raw
-    table: wearables_raw
+    client.conf.string: "tcp::addr=my-questdb.kafka.svc.cluster.local:9009;"
+    topics: wearables-raw
+    table: wearables-raw
     include.key: false
     key.converter: org.apache.kafka.connect.storage.StringConverter
     value.converter: org.apache.kafka.connect.json.JsonConverter
