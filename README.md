@@ -45,6 +45,16 @@ Not dependent:
 kubectl apply -f ./configs/mqtt-deployment.yaml -n kafka
 ```
 
+#### InfluxDB
+
+```shell
+kubectl apply -f ./influxdb/influx-deployment.yaml -n kafka
+```
+
+```shell
+kubectl apply -f ./influxab/influx-sink-connector.yaml -n kafka
+```
+
 Dependent on Kafka-Connect:
 ```shell
 kubectl apply -f ./configs/mqtt-source-connector.yaml -n kafka
