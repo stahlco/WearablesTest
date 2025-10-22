@@ -13,7 +13,8 @@ spec:
     topics: wearables-raw
     table: wearables-raw
     include.key: false
-    key.converter: org.apache.kafka.connect.storage.StringConverter
+    key.converter: org.apache.kafka.connect.json.JsonConverter
+    key.converter.schema.enable: false
     value.converter: org.apache.kafka.connect.json.JsonConverter
     value.converter.schemas.enable: false
 

@@ -55,3 +55,8 @@ spec:
         artifacts:
           - type: zip
             url: https://github.com/questdb/kafka-questdb-connector/releases/download/v0.16/kafka-questdb-connector-0.16-bin.zip
+      - name: influxdb
+        artifacts:
+           - type: zip
+             url: https://github.com/lensesio/stream-reactor/releases/download/10.0.1/kafka-connect-influxdb-10.0.1.zip
+

@@ -26,6 +26,8 @@ spec:
     # connect.mqtt.topics: "wearables/+/data:wearables-raw"
     
     # Converter settings (how to interpret MQTT payload)
-    key.converter: org.apache.kafka.connect.storage.StringConverter
-    value.converter: org.apache.kafka.connect.json.JsonConverter
+    key.converter: org.apache.kafka.connect.json.JsonConverter
+    key.converter.schemas.enable: false
+    value.converter: org.apache.kafka.connect.converters.ByteArrayConverter
     value.converter.schemas.enable: false
+

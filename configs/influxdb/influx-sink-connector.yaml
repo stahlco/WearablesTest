@@ -9,8 +9,23 @@ spec:
   class: io.lenses.streamreactor.connect.influx.InfluxSinkConnector
   tasksMax: 1
   config:
-    connect.influx.url: "influx-service.kafka.svc.cluster.local:8086"
-    connect.influx.bucket: "${file:/opt/kafka/connect/secrets/INFLUX_BUCKET}"
-    connect.influx.org: "${file:/opt/kafka/connect/secrets/INFLUX_ORG}"
-    connecrt.influx.token: "${file:/opt/kafka/connect/secrets/INFLUX_TOKEN}"
-    connect.influx.kcql: "INSERT INTO measurements SELECT * FROM wearables-raw WITHTIMESTAMP data->timestamp"
+ 
+    key.converter: org.apache.kafka.connect.json.JsonConverter
+    key.converter.schemas.enable: false
+
+    # Value is base64-encoded, but let's try with schemas first
+    value.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter.schemas.enable: false
+
+    # InfluxDB connection
+    topics: "wearables-raw"
+    connect.influx.url: "http://influx-service.kafka.svc.cluster.local:8086"
+    connect.influx.db: "test"
+    connect.influx.username: "test"
+    connect.influx.password: "test"
+    connect.influx.kcql: "INSERT INTO wearables SELECT heart_rate, timestamp FROM wearables-raw WITHTIMESTAMP timestamp"
+    
+    # Error handling for debugging
+    errors.tolerance: all
+    errors.log.enable: true
+    errors.log.include.messages: true
