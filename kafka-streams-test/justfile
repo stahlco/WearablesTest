@@ -1,0 +1,6 @@
+mk:
+    mvn clean package
+    eval $(minikube -p minikube docker-env)
+    docker build -t kafka-streams-fhri:latest .
+    kubectl delete deployment kafka-streams-fhri -n kafka --ignore-not-found=true
+    kubectl apply -f ./configs/streams/kafka-streams-fhri.yaml

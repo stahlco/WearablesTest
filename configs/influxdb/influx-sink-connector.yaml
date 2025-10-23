@@ -18,12 +18,12 @@ spec:
     value.converter.schemas.enable: false
 
     # InfluxDB connection
-    topics: "wearables-raw"
+    topics: "wearables-fhri"
     connect.influx.url: "http://influx-service.kafka.svc.cluster.local:8086"
     connect.influx.db: "test"
     connect.influx.username: "test"
     connect.influx.password: "test"
-    connect.influx.kcql: "INSERT INTO wearables SELECT heart_rate, timestamp FROM wearables-raw WITHTIMESTAMP timestamp"
+    connect.influx.kcql: "INSERT INTO wearables SELECT resourceType, id, status, effectiveDateTime, valueInteger FROM wearables-fhri WITHTIMESTAMP timestamp"
     
     # Error handling for debugging
     errors.tolerance: all
