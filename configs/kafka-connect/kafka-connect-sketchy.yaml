@@ -16,6 +16,13 @@ spec:
     limits:
       memory: 2Gi
       cpu: 1
+  logging:
+    type: inline
+    loggers:
+      connect.root.logger.level: "INFO"
+      io.lenses.streamreactor.connect.influx: "DEBUG"
+      io.lenses.streamreactor.connect.influx.writers: "DEBUG"
+      io.lenses.streamreactor.connect.influx.converters: "DEBUG"
   template:
     pod:
       imagePullSecrets:

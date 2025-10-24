@@ -41,6 +41,11 @@
             <artifactId>hapi-fhir-client</artifactId>
             <version>${fhir-version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.victools</groupId>
+            <artifactId>jsonschema-generator</artifactId>
+            <version>[4.21.0,5.0.0)</version>
+        </dependency>
     </dependencies>
 
     <build>

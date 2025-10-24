@@ -23,6 +23,12 @@ import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.IntegerType;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Patient;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.github.victools.jsonschema.generator.OptionPreset;
+import com.github.victools.jsonschema.generator.SchemaGenerator;
+import com.github.victools.jsonschema.generator.SchemaGeneratorConfig;
+import com.github.victools.jsonschema.generator.SchemaGeneratorConfigBuilder;
+import com.github.victools.jsonschema.generator.SchemaVersion;
 
 public class Main {
 
@@ -38,8 +44,13 @@ public class Main {
         KStream<String, String> upperCaseStrings = lowerCaseStrings.mapValues(new ValueMapper<String, String>() {
             @Override
             public String apply(String str) {
-                System.out.println("converting now" + str);
+                SchemaGeneratorConfigBuilder configBuilder = new SchemaGeneratorConfigBuilder(SchemaVersion.DRAFT_7, OptionPreset.PLAIN_JSON);
+                SchemaGeneratorConfig config = configBuilder.build();
+                SchemaGenerator generator = new SchemaGenerator(config);
+                JsonNode jsonSchema = generator.generateSchema(Observation.class);
 
+                System.out.println(jsonSchema.toPrettyString());
+                System.out.println("converting now" + str);
 
                 FhirContext ctx = FhirContext.forR4();
 
@@ -116,7 +127,7 @@ public class Main {
 
         configurations.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configurations.put(StreamsConfig.APPLICATION_ID_CONFIG, APP_ID);
-        configurations.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
+        configurations.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.().getClass().getName());
         configurations.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 
         configurations.put(StreamsConfig.REQUEST_TIMEOUT_MS_CONFIG, "20000");
