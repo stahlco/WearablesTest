@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: influxdb
-        image: influxdb:2.7
+        image: influxdb:1.12
         ports:
         - containerPort: 8086
         volumeMounts:
