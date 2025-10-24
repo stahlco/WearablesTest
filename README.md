@@ -35,7 +35,7 @@ kubectl apply -f kafka-single-node.yaml -n kafka
 
 Dependent on 'kafka-single-node'
 ```shell
-kubectl apply -f ./configs/kafka-connect.yaml -n kafka
+kubectl apply -f ./configs/kafka-connect-build.yaml -n kafka
 ```
 
 #### MQTT
