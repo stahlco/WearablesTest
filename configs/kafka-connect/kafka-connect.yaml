@@ -55,3 +55,7 @@ spec:
         artifacts:
            - type: zip
              url: https://github.com/lensesio/stream-reactor/releases/download/10.0.1/kafka-connect-influxdb-10.0.1.zip
+      - name: schemaless-json-converter
+        artifacts:
+            - type: jar
+              url: https://raw.githubusercontent.com/stahlco/fhir_schema/main/connect-schemaless-json-0.10.1.0.jar
