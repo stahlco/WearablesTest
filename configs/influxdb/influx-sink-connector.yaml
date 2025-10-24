@@ -9,23 +9,25 @@ spec:
   class: io.lenses.streamreactor.connect.influx.InfluxSinkConnector
   tasksMax: 1
   config:
- 
+    # Key converter
     key.converter: org.apache.kafka.connect.json.JsonConverter
     key.converter.schemas.enable: false
-
-    # Value is base64-encoded, but let's try with schemas first
-    value.converter: org.apache.kafka.connect.storage.StringConverter
-    value.converter.schemas.enable: false
-
+    
+    value.converter: org.apache.kafka.connect.json.JsonConverter  
+    value.converter.schemas.enable: true
+    value.converter.schema.registry.url: "https://raw.githubusercontent.com/stahlco/fhir_schema/refs/heads/main/fhir.schema.json"
     # InfluxDB connection
     topics: "wearables-fhri"
     connect.influx.url: "http://influx-service.kafka.svc.cluster.local:8086"
     connect.influx.db: "test"
     connect.influx.username: "test"
     connect.influx.password: "test"
-    connect.influx.kcql: "INSERT INTO wearables SELECT resourceType, id, status, effectiveDateTime, valueInteger FROM wearables-fhri WITHTIMESTAMP timestamp"
     
-    # Error handling for debugging
+    # Simplified KCQL - use the topic name as measurement initially
+    connect.influx.kcql: "INSERT INTO wearables SELECT resourceType, id, status, effectiveDateTime, valueInteger FROM wearables-fhri WITHTIMESTAMP sys_time()"
+    # Error handling
     errors.tolerance: all
     errors.log.enable: true
     errors.log.include.messages: true
+    errors.deadletterqueue.topic.name: "influx-sink-dlq"
+    errors.deadletterqueue.topic.replication.factor: 1
