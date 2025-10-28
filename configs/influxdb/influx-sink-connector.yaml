@@ -24,8 +24,8 @@ spec:
     connect.influx.username: "test"
     connect.influx.password: "test"
 
-    # Simplified KCQL - use the topic name as measurement initially
-    connect.influx.kcql: "INSERT INTO wearables SELECT * FROM wearables-fhri WITHTIMESTAMP sys_time()"
+    # Simplified KCQL - use the topic name as measurement initially -> Need to be updated
+    connect.influx.kcql: "INSERT INTO test SELECT * FROM wearables-fhri WITHTIMESTAMP sys_time() STOREAS JSON"
     # Error handling
     errors.tolerance: all
     errors.log.enable: true

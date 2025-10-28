@@ -1,0 +1,12 @@
+device: "test"
+mappings:
+  heart_rate:
+    source: "activity.heart_rate"
+    target: "Observation.valueQuantity.value"
+    code: "8867-4"
+    unit: "beats/minute"
+  steps:
+    source: "activity.steps"
+    target: "Observation.valueQuantity.value"
+    code: "55423-8"
+    unit: "count"

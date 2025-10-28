@@ -1,0 +1,15 @@
+apiVersion: 1
+
+datasources:
+- name: Garmin-InfluxDB
+  orgId: 1
+  type: influxdb
+  access: proxy
+  url: http://influxdb-service.kafka.svc.cluster.local:8086
+  database: test
+  isDefault: false
+  version: 1
+  editable: false
+  basicAuth: true
+  basicAuthUser: test
+  basicAuthPassword: test
