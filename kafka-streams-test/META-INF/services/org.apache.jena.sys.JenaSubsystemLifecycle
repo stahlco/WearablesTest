@@ -1,0 +1,5 @@
+org.apache.jena.shex.sys.InitShex
+org.apache.jena.riot.system.InitRIOT
+org.apache.jena.sparql.system.InitARQ
+org.apache.jena.rdfs.sys.InitRDFS
+org.apache.jena.sys.InitJenaCore
